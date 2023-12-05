@@ -1,30 +1,32 @@
 public  class Device {
-    private int avaivableMemRR = 960;    // Makinenin sahip oldugu bellek miktari
-    private int availeMemFCFS = 64;
-    private int avaivablePrinter = 2;// Makinenin sahip oldugu yazici sayisi
-    private int avaivableScanner = 1;//  Makinenin sahip oldugu tarayici sayisi
-    private int avaivableRouter = 1;//  Makinenin sahip oldugu Modem sayisi
-    private int avaivableCDROM = 2;// Makinenin sahip oldugu cd/dvd sayisi
+    private int availableMemRR = 960;    // Makinenin sahip oldugu bellek miktari
+    private int availableMemFCFS = 64;
+    private int availablePrinter = 2;// Makinenin sahip oldugu yazici sayisi
+    private int availableScanner = 1;//  Makinenin sahip oldugu tarayici sayisi
+    private int availableRouter = 1;//  Makinenin sahip oldugu Modem sayisi
+    private int availableCDROM = 2;// Makinenin sahip oldugu cd/dvd sayisi
 
     Device() {
 
     }
 
-    void tryAllocateForProcess(ExecutableProcess process) {
-        if (process.getPriority() == 0) {
-            return ;
+    boolean tryAllocateForProcess(ExecutableProcess process) {
+        if (process.getPriority() == 0 && process) {
+            allocateMemoryFCFS(process.getRequiredMem());
+            return true;
         } else {
-            if (process.getRequiredMem() <= avaivableMemRR &&
-                    process.getRequiredPrinter() <= avaivablePrinter &&
-                    process.getRequiredScanner() <= avaivableScanner&&
-                    process.getRequiredRouter() <= avaivableRouter &&
-                    process.getRequiredCDROM() <= avaivableCDROM ){
-                allocateMemory(process.getRequiredMem());
+            if (process.getRequiredMem() <= availableMemRR &&
+                    process.getRequiredPrinter() <= availablePrinter &&
+                    process.getRequiredScanner() <= availableScanner &&
+                    process.getRequiredRouter() <= availableRouter &&
+                    process.getRequiredCDROM() <= availableCDROM){
+                allocateMemoryRR(process.getRequiredMem());
                 usePrinter(process.getRequiredPrinter());
                 useScanner(process.getRequiredScanner());
                 useCDROM(process.getRequiredCDROM());
-                return;
+                return true;
             }
+            else return false;
         }
     }
 
@@ -45,28 +47,29 @@ public  class Device {
 
     }
 
-    void allocateMemory(int reqMem) {
-            avaivableMemRR = avaivableMemRR - reqMem;
+    private void allocateMemoryRR(int reqMem) {
+            availableMemRR = availableMemRR - reqMem;
+    }
+    private void allocateMemoryFCFS(int reqMem) {
+        availableMemFCFS = availableMemFCFS - reqMem;}
+    private void usePrinter(int reqPrinter) {
+            availablePrinter = availablePrinter - reqPrinter;
     }
 
-    public void usePrinter(int reqPrinter) {
-            avaivablePrinter = avaivablePrinter - reqPrinter;
+    private void useScanner(int reqScanner) {
+            availableScanner = availableScanner - reqScanner;
     }
 
-    public void useScanner(int reqScanner) {
-            avaivableScanner = avaivableScanner - reqScanner;
+    private void useRouter(int reqRouter) {
+            availableRouter = availableRouter - reqRouter;
     }
 
-
-    public void useRouter(int reqRouter) {
-            avaivableRouter = avaivableRouter - reqRouter;
+    private void useCDROM(int reqCDROM) {
+            availableCDROM = availableCDROM - reqCDROM;
+            System.out.println(availableCDROM);
     }
 
-    public void useCDROM(int reqCDROM) {
-            avaivableCDROM = avaivableCDROM - reqCDROM;
-    }
-
-    public int getAvaivableMemRR() {
-        return avaivableMemRR;
+    public int getAvailableMemRR() {
+        return availableMemRR;
     }
 }

@@ -17,6 +17,6 @@ public abstract class Scheduler {
     protected void printSchedulerInfo() {
         String sch = priorityLevel == 0 ? "Gercek Zamanli (FCFS) " : priorityLevel + "(. Seviye Geri Beslemeli(Round Robin)";
         System.out.println("Executelanan Prosesin Gorevlendirici Duzeyi: " + sch);
-        System.out.println(device.getAvaivableMemRR());
+        System.out.println("avaivable ram for rr "+device.getAvailableMemRR());
     }
 }
