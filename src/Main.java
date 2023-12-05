@@ -5,8 +5,7 @@ import java.util.Queue;
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
+
         Device device = new Device();   // cihaz olusturuluyor
 
         LinkedList<ExecutableProcess> processes = new LinkedList<>();
@@ -20,12 +19,15 @@ public class Main {
         scheduler[2] = new RoundRobin(device, 2);
         scheduler[3] = new RoundRobin(device, 3);
 
-        Queue<ExecutableProcess> waitingQueue = new LinkedList<>();
+        Queue<ExecutableProcess> insufficientSouceQueue = new LinkedList<>();
 
-        int time = 0; // zaman degeri ataniyor
+        int time = 0; // zaman tanimlaniyor
         while (true) {
-            for (ExecutableProcess process : waitingQueue) {
-
+            for (ExecutableProcess process : insufficientSouceQueue) {
+                if (device.tryAllocateForProcess(process)) {
+                    scheduler[process.getPriority()].addToQueue(process);// Kaynak yetmezliginden dolayı sirada olan processler
+                    System.out.println(process.getPriority() + ". priority sirasina eklendi ama yedekten");
+                }                                                        // Tekrardan Gorevlendirici sirasina yerlestirilmeye calisiliyor
             }
             for (ExecutableProcess process : processes) {  //tum prosesler dolasiliyor
                 if (process.getArriveTime() == time) {
@@ -33,17 +35,17 @@ public class Main {
                         scheduler[process.getPriority()].addToQueue(process);
                         System.out.println(process.getPriority() + ". priority sirasina eklendi "); //zamani gelen proses var ise queuya ekleniyor
                     } else
-                        waitingQueue.add(process);
+                        insufficientSouceQueue.add(process);
                 }
             }                       // PROSESLERIN EKLENME KISIMI
+            System.out.println("Kalan Kullanilabilir RR ALANI :" +device.getAvailableMemRR());
+            System.out.println("Kalan Kullanilabilir FCFS ALANI :" +device.getAvailableMemFCFS());
+            time++;
             try {
-                Thread.sleep(1000);
-            }
-            catch (Exception e)
-            {
+                Thread.sleep(5000);
+            } catch (Exception e) {
                 System.out.println(e.toString());
             }
-            time++;
         }
     }
 }
