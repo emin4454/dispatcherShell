@@ -15,31 +15,45 @@ public class Main {
 
         Scheduler[] scheduler = new Scheduler[4];
         scheduler[0] = new FCFS(device, 0);
-        scheduler[1] = new RoundRobin(device, 1);       // 4 tane gorevlendirici olusturuluyor
+        scheduler[1] = new RoundRobin(device, 1);       // Cihaz icin 4 tane gorevlendirici olusturuluyor
         scheduler[2] = new RoundRobin(device, 2);
         scheduler[3] = new RoundRobin(device, 3);
 
         Queue<ExecutableProcess> insufficientSouceQueue = new LinkedList<>();
 
         int time = 0; // zaman tanimlaniyor
+        int lastIteratedPriority; //Kesme geldigini anlamak icin tanimlaniyor
         while (true) {
+            //PROSESLERIN SIRALARA YERLESTIRILDIGI ALGORITMA BASLANGICI
+            System.out.println("-----------------------------------------------");
+            System.out.println("zaman : " + time);
             for (ExecutableProcess process : insufficientSouceQueue) {
                 if (device.tryAllocateForProcess(process)) {
                     scheduler[process.getPriority()].addToQueue(process);// Kaynak yetmezliginden dolayı sirada olan processler
                     System.out.println(process.getPriority() + ". priority sirasina eklendi ama yedekten");
-                }                                                        // Tekrardan Gorevlendirici sirasina yerlestirilmeye calisiliyor
+                }   // Tekrardan Gorevlendirici sirasina yerlestirilmeye calisiliyor
             }
             for (ExecutableProcess process : processes) {  //tum prosesler dolasiliyor
                 if (process.getArriveTime() == time) {
-                    if (device.tryAllocateForProcess(process)) {
+                    if (device.tryAllocateForProcess(process)) {        //eger proses yeterli alana sahipse
                         scheduler[process.getPriority()].addToQueue(process);
                         System.out.println(process.getPriority() + ". priority sirasina eklendi "); //zamani gelen proses var ise queuya ekleniyor
                     } else
                         insufficientSouceQueue.add(process);
                 }
-            }                       // PROSESLERIN EKLENME KISIMI
-            System.out.println("Kalan Kullanilabilir RR ALANI :" +device.getAvailableMemRR());
-            System.out.println("Kalan Kullanilabilir FCFS ALANI :" +device.getAvailableMemFCFS());
+            }
+            // PROSESLERIN SIRAYA YERLESTIRILDIGI ALGORITMA SONU
+
+            // PROSESLERIN EXECUTELANACAGI YER
+            for(int i = 0; i<4;i++){
+                if(!scheduler[0].isQueueEmpty()){
+                    scheduler[0].executeOneIteration();
+                    break;
+                };
+            }
+
+            System.out.println("Kalan Kullanilabilir RR ALANI :" + device.getAvailableMemRR());
+            System.out.println("Kalan Kullanilabilir FCFS ALANI :" + device.getAvailableMemFCFS());
             time++;
             try {
                 Thread.sleep(5000);
