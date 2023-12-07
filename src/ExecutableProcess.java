@@ -58,8 +58,27 @@ public class ExecutableProcess {
         return burstTime;
     }
 
+    public int getProcessID() {
+        return processid;
+    }
+
     public boolean executeOneTimeUnit() {
-        burstTime--;
-        return burstTime == 0;
+        System.out.println(burstTime);
+        this.burstTime--;
+        return this.burstTime == 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Prosesin Bilgileri  " +
+                "ID=" + processid +
+                ", Gelis Zamani=" + arriveTime +
+                ", Oncelik=" + priority +
+                ", Islem Suresi=" + burstTime +
+                ", Gerekli Hafiza=" + requiredMem +
+                ", Gerekli Yazici=" + requiredPrinter +
+                ", Gerekli Tarayici=" + requiredScanner +
+                ", Gerekli Modem=" + requiredRouter +
+                ", Gerekli CD/DVD=" + requiredCDROM;
     }
 }

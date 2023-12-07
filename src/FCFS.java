@@ -23,12 +23,13 @@ public class FCFS extends Scheduler {
     @Override
     public void executeOneIteration() {
         ExecutableProcess aboutToExecuteProcess = readyQueue.peek();
+        printSchedulerInfo();
+        System.out.println("Process 1 saniye calisti");
+        System.out.println("Calisan " + aboutToExecuteProcess.toString());
         if(aboutToExecuteProcess.executeOneTimeUnit()){
             readyQueue.poll();// Eger true donerse proses bitmis demektir
             device.releaseResources(aboutToExecuteProcess);
             System.out.println("Proses bitti");
         }
-        System.out.println("1 saniye calisti");
-        printSchedulerInfo();
     }   //BURADA KALDIN
 }
