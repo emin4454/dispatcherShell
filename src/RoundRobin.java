@@ -6,7 +6,7 @@ public class RoundRobin extends Scheduler {
     protected final List<ExecutableProcess> readyList = new LinkedList<>(); // Prosesler icin hazir kuyrugu
     private int quantumTime = 2; // kuantum suresi
     private int lastExecutedIndex = 0;
-
+    //BURADA KALDIN
     RoundRobin(Device device, int priorityLevel) {
         super(device);
         this.priorityLevel = priorityLevel;

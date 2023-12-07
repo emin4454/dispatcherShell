@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -37,10 +38,10 @@ public class Main {
                 }   // Tekrardan Gorevlendirici sirasina yerlestirilmeye calisiliyor
             }
             for (ExecutableProcess process : processes) {  //tum prosesler dolasiliyor
-                if (process.getArriveTime() == time) {
+                if (process.getArriveTime() == time) { // Eger prosesin zamani geldiyse
                     if (device.tryAllocateForProcess(process)) {        //eger proses yeterli alana sahipse
-                        process.assignProcess();
-                        if(process.getPriority()<lastIteratedPriority)
+                        process.assignProcess();                    //prosese id atanir
+                        if(process.getPriority()<lastIteratedPriority)      //eger onceligi daha yuksekse kesme geldigini belirtir
                             System.out.println("Kesme Geldi (Daha yüksek öncelikli bir process geldi)");
                         scheduler[process.getPriority()].addToList(process); //zamani gelen proses var ise queuya ekleniyor
                         System.out.println(process.getPriority() + ". priority sirasina sahip " + process.getBurstTime() +
@@ -61,8 +62,7 @@ public class Main {
                 }
             }
 
-            System.out.println("Kalan Kullanilabilir RR ALANI :" + device.getAvailableMemRR());
-            System.out.println("Kalan Kullanilabilir FCFS ALANI :" + device.getAvailableMemFCFS());
+            device.printResources();
             time++;
             try {
                 Thread.sleep(5000);

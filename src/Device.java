@@ -37,6 +37,14 @@ public class Device {
             releaseCDROM(process.getRequiredCDROM());
         }
     }
+    public void printResources(){
+        System.out.println("Kalan Kullanilabilir RR alani :" + this.getAvailableMemRR() + " Mbyte");
+        System.out.println("Kalan Kullanilabilir FCFS alani :" + this.getAvailableMemFCFS() +" Mbyte");
+        System.out.println("Kalan Kullanilabilir Yazici Sayisi :" +this.getAvailablePrinter());
+        System.out.println("Kalan Kullanilabilir Tarayici Sayisi :" +this.getAvailableScanner());
+        System.out.println("Kalan Kullanilabilir Modem Sayisi :" +this.getAvailableRouter());
+        System.out.println("Kalan Kullanilabilir CD/DVD Sayisi :" +this.getAvailableCDROM());
+    }
     private void freeMemoryRR(int mem) {
         availableMemRR +=mem;
     }
@@ -107,4 +115,5 @@ public class Device {
         return availableCDROM;
     }
 }
+
 

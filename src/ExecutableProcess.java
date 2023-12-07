@@ -63,7 +63,6 @@ public class ExecutableProcess {
     }
 
     public boolean executeOneTimeUnit() {
-        System.out.println(burstTime);
         this.burstTime--;
         return this.burstTime == 0;
     }
