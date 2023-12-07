@@ -1,29 +1,67 @@
 import java.util.LinkedList;
+import java.util.Queue;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        Device device = new Device();
+
+        Device device = new Device();   // cihaz olusturuluyor
 
         LinkedList<ExecutableProcess> processes = new LinkedList<>();
-        processes.add(new ExecutableProcess(0, 1, 2, 574, 2, 0, 1, 3));
-        processes.add(new ExecutableProcess(1, 0, 1, 50, 0, 0, 0, 10));
+        processes.add(new ExecutableProcess(0, 1, 2, 574, 2, 0, 1, 2));
+        processes.add(new ExecutableProcess(1, 0, 3, 50, 0, 0, 0, 10));
         processes.add(new ExecutableProcess(1, 0, 3, 65, 0, 0, 0, 0));
 
         Scheduler[] scheduler = new Scheduler[4];
-        scheduler[0] = new FCFS(device ,0);
-        scheduler[1] = new RoundRobin(device ,1);
-        scheduler[2] = new RoundRobin(device ,2);
-        scheduler[3] = new RoundRobin(device,3);
+        scheduler[0] = new FCFS(device, 0);
+        scheduler[1] = new RoundRobin(device, 1);       // Cihaz icin 4 tane gorevlendirici olusturuluyor
+        scheduler[2] = new RoundRobin(device, 2);
+        scheduler[3] = new RoundRobin(device, 3);
 
-        int time = 0;
+        Queue<ExecutableProcess> insufficientSouceQueue = new LinkedList<>();
 
-        for (int i = 0; i < 10; i++) {
-            scheduler[0].executeOneIteration();
+        int time = 0; // zaman tanimlaniyor
+        int lastIteratedPriority; //Kesme geldigini anlamak icin tanimlaniyor
+        while (true) {
+            //PROSESLERIN SIRALARA YERLESTIRILDIGI ALGORITMA BASLANGICI
+            System.out.println("-----------------------------------------------");
+            System.out.println("zaman : " + time);
+            for (ExecutableProcess process : insufficientSouceQueue) {
+                if (device.tryAllocateForProcess(process)) {
+                    scheduler[process.getPriority()].addToList(process);// Kaynak yetmezliginden dolayı sirada olan processler
+                    System.out.println(process.getPriority() + ". priority sirasina eklendi ama yedekten");
+                }   // Tekrardan Gorevlendirici sirasina yerlestirilmeye calisiliyor
+            }
+            for (ExecutableProcess process : processes) {  //tum prosesler dolasiliyor
+                if (process.getArriveTime() == time) {
+                    if (device.tryAllocateForProcess(process)) {        //eger proses yeterli alana sahipse
+                        process.assignProcess();
+                        scheduler[process.getPriority()].addToList(process); //zamani gelen proses var ise queuya ekleniyor
+                        System.out.println(process.getPriority() + ". priority sirasina sahip" + process.getBurstTime() + "islem suresine sahip");
+                    } else
+                        insufficientSouceQueue.add(process);
+                }
+            }
+            System.out.println("-----------------Gorevlendiriciye yerlestirme asamasi bitti--------------");
+            // PROSESLERIN SIRAYA YERLESTIRILDIGI ALGORITMA SONU
+
+            // PROSESLERIN EXECUTELANACAGI YER
+            for (int i = 0; i < 4; i++) {
+                if (!scheduler[0].isListEmpty()) {
+                    scheduler[0].executeOneIteration();
+                    break;
+                }
+            }
+
+            System.out.println("Kalan Kullanilabilir RR ALANI :" + device.getAvailableMemRR());
+            System.out.println("Kalan Kullanilabilir FCFS ALANI :" + device.getAvailableMemFCFS());
             time++;
+            try {
+                Thread.sleep(5000);
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
         }
     }
 }

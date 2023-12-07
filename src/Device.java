@@ -1,72 +1,110 @@
-public  class Device {
-    private int avaivableMemRR = 960;    // Makinenin sahip oldugu bellek miktari
-    private int availeMemFCFS = 64;
-    private int avaivablePrinter = 2;// Makinenin sahip oldugu yazici sayisi
-    private int avaivableScanner = 1;//  Makinenin sahip oldugu tarayici sayisi
-    private int avaivableRouter = 1;//  Makinenin sahip oldugu Modem sayisi
-    private int avaivableCDROM = 2;// Makinenin sahip oldugu cd/dvd sayisi
+public class Device {
+    private int availableMemRR = 960;    // Makinenin sahip oldugu bellek miktari
+    private int availableMemFCFS = 64;
+    private int availablePrinter = 2;// Makinenin sahip oldugu yazici sayisi
+    private int availableScanner = 1;//  Makinenin sahip oldugu tarayici sayisi
+    private int availableRouter = 1;//  Makinenin sahip oldugu Modem sayisi
+    private int availableCDROM = 2;// Makinenin sahip oldugu cd/dvd sayisi
 
     Device() {
 
     }
 
-    void tryAllocateForProcess(ExecutableProcess process) {
-        if (process.getPriority() == 0) {
-            return ;
+    boolean tryAllocateForProcess(ExecutableProcess process) {
+        if (process.getPriority() == 0 ) {
+            if(process.getRequiredMem() <= availableMemFCFS) {
+                allocateMemoryFCFS(process.getRequiredMem());
+                return true;
+            }else return false;
         } else {
-            if (process.getRequiredMem() <= avaivableMemRR &&
-                    process.getRequiredPrinter() <= avaivablePrinter &&
-                    process.getRequiredScanner() <= avaivableScanner&&
-                    process.getRequiredRouter() <= avaivableRouter &&
-                    process.getRequiredCDROM() <= avaivableCDROM ){
-                allocateMemory(process.getRequiredMem());
+            if (process.getRequiredMem() <= availableMemRR && process.getRequiredPrinter() <= availablePrinter && process.getRequiredScanner() <= availableScanner && process.getRequiredRouter() <= availableRouter && process.getRequiredCDROM() <= availableCDROM) {
+                allocateMemoryRR(process.getRequiredMem());
                 usePrinter(process.getRequiredPrinter());
                 useScanner(process.getRequiredScanner());
                 useCDROM(process.getRequiredCDROM());
-                return;
-            }
+                return true;
+            } else return false;
         }
     }
-
-    void freeMemory() {
+    void releaseResources(ExecutableProcess process){
+        if(process.getPriority()==0)
+            freeMemoryFCFS(process.getRequiredMem());
+        else {
+            freeMemoryRR(process.getRequiredMem());
+            releasePrinter(process.getRequiredPrinter());
+            releaseScanner(process.getRequiredScanner());
+            releaseRouter(process.getRequiredRouter());
+            releaseCDROM(process.getRequiredCDROM());
+        }
+    }
+    private void freeMemoryRR(int mem) {
+        availableMemRR +=mem;
+    }
+    private void freeMemoryFCFS(int mem){
+        availableMemFCFS+=mem;
+    }
+    private void releasePrinter(int printerAmount) {
+        availablePrinter+=printerAmount;
     }
 
-    void releasePrinter() {
+    private void releaseScanner(int scannerAmount) {
+        availableScanner+=scannerAmount;
     }
 
-    void releaseScanner() {
+    private void releaseRouter(int routerAmount) {
+        availableRouter+=routerAmount;
     }
 
-    void releaseRouter() {
-
+    private void releaseCDROM(int cdromAmount) {
+        availableCDROM+=cdromAmount;
     }
 
-    void releaseCDROM() {
-
+    private void allocateMemoryRR(int reqMem) {
+        availableMemRR = availableMemRR - reqMem;
     }
 
-    void allocateMemory(int reqMem) {
-            avaivableMemRR = avaivableMemRR - reqMem;
+    private void allocateMemoryFCFS(int reqMem) {
+        availableMemFCFS = availableMemFCFS - reqMem;
     }
 
-    public void usePrinter(int reqPrinter) {
-            avaivablePrinter = avaivablePrinter - reqPrinter;
+    private void usePrinter(int reqPrinter) {
+        availablePrinter = availablePrinter - reqPrinter;
     }
 
-    public void useScanner(int reqScanner) {
-            avaivableScanner = avaivableScanner - reqScanner;
+    private void useScanner(int reqScanner) {
+        availableScanner = availableScanner - reqScanner;
     }
 
-
-    public void useRouter(int reqRouter) {
-            avaivableRouter = avaivableRouter - reqRouter;
+    private void useRouter(int reqRouter) {
+        availableRouter = availableRouter - reqRouter;
     }
 
-    public void useCDROM(int reqCDROM) {
-            avaivableCDROM = avaivableCDROM - reqCDROM;
+    private void useCDROM(int reqCDROM) {
+        availableCDROM = availableCDROM - reqCDROM;
     }
 
-    public int getAvaivableMemRR() {
-        return avaivableMemRR;
+    public int getAvailableMemRR() {
+        return availableMemRR;
+    }
+
+    public int getAvailableMemFCFS() {
+        return availableMemFCFS;
+    }
+
+    public int getAvailablePrinter() {
+        return availablePrinter;
+    }
+
+    public int getAvailableScanner() {
+        return availableScanner;
+    }
+
+    public int getAvailableRouter() {
+        return availableRouter;
+    }
+
+    public int getAvailableCDROM() {
+        return availableCDROM;
     }
 }
+
