@@ -10,7 +10,7 @@ public class Main {
 
         LinkedList<ExecutableProcess> processes = new LinkedList<>();
         processes.add(new ExecutableProcess(0, 1, 2, 574, 2, 0, 1, 2));
-        processes.add(new ExecutableProcess(1, 0, 1, 50, 0, 0, 0, 10));
+        processes.add(new ExecutableProcess(1, 0, 3, 50, 0, 0, 0, 10));
         processes.add(new ExecutableProcess(1, 0, 3, 65, 0, 0, 0, 0));
 
         Scheduler[] scheduler = new Scheduler[4];
@@ -29,27 +29,29 @@ public class Main {
             System.out.println("zaman : " + time);
             for (ExecutableProcess process : insufficientSouceQueue) {
                 if (device.tryAllocateForProcess(process)) {
-                    scheduler[process.getPriority()].addToQueue(process);// Kaynak yetmezliginden dolayı sirada olan processler
+                    scheduler[process.getPriority()].addToList(process);// Kaynak yetmezliginden dolayı sirada olan processler
                     System.out.println(process.getPriority() + ". priority sirasina eklendi ama yedekten");
                 }   // Tekrardan Gorevlendirici sirasina yerlestirilmeye calisiliyor
             }
             for (ExecutableProcess process : processes) {  //tum prosesler dolasiliyor
                 if (process.getArriveTime() == time) {
                     if (device.tryAllocateForProcess(process)) {        //eger proses yeterli alana sahipse
-                        scheduler[process.getPriority()].addToQueue(process);
-                        System.out.println(process.getPriority() + ". priority sirasina eklendi "); //zamani gelen proses var ise queuya ekleniyor
+                        process.assignProcess();
+                        scheduler[process.getPriority()].addToList(process); //zamani gelen proses var ise queuya ekleniyor
+                        System.out.println(process.getPriority() + ". priority sirasina sahip" + process.getBurstTime() + "islem suresine sahip");
                     } else
                         insufficientSouceQueue.add(process);
                 }
             }
+            System.out.println("-----------------Gorevlendiriciye yerlestirme asamasi bitti--------------");
             // PROSESLERIN SIRAYA YERLESTIRILDIGI ALGORITMA SONU
 
             // PROSESLERIN EXECUTELANACAGI YER
-            for(int i = 0; i<4;i++){
-                if(!scheduler[0].isQueueEmpty()){
+            for (int i = 0; i < 4; i++) {
+                if (!scheduler[0].isListEmpty()) {
                     scheduler[0].executeOneIteration();
                     break;
-                };
+                }
             }
 
             System.out.println("Kalan Kullanilabilir RR ALANI :" + device.getAvailableMemRR());

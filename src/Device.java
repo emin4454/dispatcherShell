@@ -26,22 +26,37 @@ public class Device {
             } else return false;
         }
     }
-
-    void freeMemory() {
+    void releaseResources(ExecutableProcess process){
+        if(process.getPriority()==0)
+            freeMemoryFCFS(process.getRequiredMem());
+        else {
+            freeMemoryRR(process.getRequiredMem());
+            releasePrinter(process.getRequiredPrinter());
+            releaseScanner(process.getRequiredScanner());
+            releaseRouter(process.getRequiredRouter());
+            releaseCDROM(process.getRequiredCDROM());
+        }
+    }
+    private void freeMemoryRR(int mem) {
+        availableMemRR +=mem;
+    }
+    private void freeMemoryFCFS(int mem){
+        availableMemFCFS+=mem;
+    }
+    private void releasePrinter(int printerAmount) {
+        availablePrinter+=printerAmount;
     }
 
-    void releasePrinter() {
+    private void releaseScanner(int scannerAmount) {
+        availableScanner+=scannerAmount;
     }
 
-    void releaseScanner() {
+    private void releaseRouter(int routerAmount) {
+        availableRouter+=routerAmount;
     }
 
-    void releaseRouter() {
-
-    }
-
-    void releaseCDROM() {
-
+    private void releaseCDROM(int cdromAmount) {
+        availableCDROM+=cdromAmount;
     }
 
     private void allocateMemoryRR(int reqMem) {

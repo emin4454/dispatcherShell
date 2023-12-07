@@ -12,10 +12,9 @@ public abstract class Scheduler {
     }
     public abstract void addToList(ExecutableProcess process);
 
-    public abstract boolean isListEmpty(ExecutableProcess process);
+    public abstract boolean isListEmpty();
     protected void printSchedulerInfo() {
         String sch = priorityLevel == 0 ? "Gercek Zamanli (FCFS) " : priorityLevel + "(. Seviye Geri Beslemeli(Round Robin)";
         System.out.println("Executelanan Prosesin Gorevlendirici Duzeyi: " + sch);
-        System.out.println("avaivable ram for rr "+device.getAvailableMemRR());
     }
 }

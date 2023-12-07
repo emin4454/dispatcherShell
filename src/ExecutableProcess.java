@@ -1,4 +1,7 @@
 public class ExecutableProcess {
+
+    private static int assignedProcessCounter = 0;
+    private int processid;
     private int arriveTime; //Prosesin gelme zamani
     private int priority; //Prosesin onceligi
     private int burstTime; //Prosesin ne kadar zaman aldigi
@@ -7,6 +10,7 @@ public class ExecutableProcess {
     private int requiredScanner;// Prosesin ihtiyac duydugu tarayici sayisi
     private int requiredRouter;// Prosesin ihtiyac duydugu Modem sayisi
     private int requiredCDROM;//Prosesin ihtiyac duydugu cd/dvd sayisi
+    private int aliveTime;
 
     public ExecutableProcess(int arriveTime, int priority, int burstTime, int requiredMem, int requiredPrinter, int requiredScanner, int requiredRouter, int requiredCD) {
         this.arriveTime = arriveTime;
@@ -18,7 +22,10 @@ public class ExecutableProcess {
         this.requiredRouter = requiredRouter;
         this.requiredCDROM = requiredCD;
     }
-
+    public void assignProcess(){
+        processid = assignedProcessCounter;
+        assignedProcessCounter++;
+    }
     public int getPriority() {
         return priority;
     }
@@ -51,4 +58,8 @@ public class ExecutableProcess {
         return burstTime;
     }
 
+    public boolean executeOneTimeUnit() {
+        burstTime--;
+        return burstTime == 0;
+    }
 }

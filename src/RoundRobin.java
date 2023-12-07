@@ -13,7 +13,7 @@ public class RoundRobin extends Scheduler {
     }
 
     @Override
-    public boolean isListEmpty(ExecutableProcess process) {
+    public boolean isListEmpty() {
         return readyList.isEmpty();
     }
 
