@@ -1,29 +1,26 @@
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-
 public class RoundRobin extends Scheduler {
-    protected final List<ExecutableProcess> readyList = new LinkedList<>(); // Prosesler icin hazir kuyrugu
-    private int quantumTime = 2; // kuantum suresi
-    private int lastExecutedIndex = 0;
     //BURADA KALDIN
     RoundRobin(Device device, int priorityLevel) {
         super(device);
         this.priorityLevel = priorityLevel;
     }
-
     @Override
-    public boolean isListEmpty() {
-        return readyList.isEmpty();
-    }
-
-    @Override
-    public void addToList(ExecutableProcess process) {
-        readyList.add(process);
-    }
-
-    @Override
-    public void executeOneIteration() {
-
+    public void executeOneIteration(Scheduler[] schedulers) {
+        ExecutableProcess aboutToExecuteProcess = readyQueue.poll();
+        printSchedulerInfo();
+        System.out.println("Process 1 saniye calisti");
+        System.out.println("Calisan " + aboutToExecuteProcess.toString());
+        if (aboutToExecuteProcess.executeOneTimeUnit()) {
+            System.out.println("Proses bitti");
+            device.releaseResources(aboutToExecuteProcess);
+        } else {
+            if(aboutToExecuteProcess.getPriority()==1 || aboutToExecuteProcess.getPriority()==2) {
+                aboutToExecuteProcess.reducePriority();
+                schedulers[aboutToExecuteProcess.getPriority()].addToQueue(aboutToExecuteProcess);
+            }
+            else {
+                readyQueue.add(aboutToExecuteProcess);
+            }
+        }
     }
 }

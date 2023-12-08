@@ -63,10 +63,12 @@ public class ExecutableProcess {
     }
 
     public boolean executeOneTimeUnit() {
-        this.burstTime--;
-        return this.burstTime == 0;
+        burstTime--;
+        return burstTime == 0;
     }
-
+    public void reducePriority(){
+        priority++;
+    }
     @Override
     public String toString() {
         return "Prosesin Bilgileri  " +
