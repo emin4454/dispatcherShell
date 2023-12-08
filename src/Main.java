@@ -33,7 +33,7 @@ public class Main {
                     scheduler[process.getPriority()].addToQueue(process);// Kaynak yetmezliginden dolayı sirada olan processler
                     insufficientSourceList.remove(process);
                     String sch = process.getPriority() == 0 ? "Gercek Zamanli (FCFS) " : process.getPriority() + ". Seviye Geri Beslemeli(Round Robin)";
-                    System.out.println("Bekleme sirasinda olan " +process.getPriority() + ". seviye öncelikli ve" + process.getBurstTime() +
+                    System.out.println("Bekleme sirasinda olan " +process.getPriority() + ". seviye öncelikli ve " + process.getBurstTime() +
                             " islem suresine sahip olan prosesin IDsi " + process.getProcessID() + " olarak atandi ve " + sch + "İş sıralayıcıya yerleştirildi");
                 }   // Tekrardan Gorevlendirici sirasina yerlestirilmeye calisiliyor
             }
@@ -45,7 +45,7 @@ public class Main {
                             System.out.println("Kesme Geldi (Daha yüksek öncelikli bir process geldi)");
                         scheduler[process.getPriority()].addToQueue(process);   //zamani gelen proses var ise queuya ekleniyor
                         String sch = process.getPriority() == 0 ? "Gercek Zamanli (FCFS) " : process.getPriority() + ". Seviye Geri Beslemeli(Round Robin)";
-                        System.out.println(process.getPriority() + ". seviye öncelikli ve" + process.getBurstTime() +
+                        System.out.println(process.getPriority() + ". seviye öncelikli ve " + process.getBurstTime() +
                                 " islem suresine sahip olan prosesin IDsi " + process.getProcessID() + " olarak atandi ve " + sch + "İş siralayiciya yerlestirildi");
                     } else {
                         insufficientSourceList.add(process);
@@ -53,6 +53,7 @@ public class Main {
                                 " islem suresi olan proses yeterli kaynak olmadigindan bekleme sirasina alindi");
                     }
                 }
+                else System.out.println("Bu zaman araliginda yeni islem gelmedi");
             }
             System.out.println("--------Is siralayiciya yerlestirme asamasi bitti------");
             // PROSESLERIN SIRAYA YERLESTIRILDIGI ALGORITMA SONU
