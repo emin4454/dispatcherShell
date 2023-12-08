@@ -9,9 +9,9 @@ public class Main {
         Device device = new Device();   // cihaz olusturuluyor
 
         LinkedList<ExecutableProcess> processes = new LinkedList<>();
-        processes.add(new ExecutableProcess(0, 1, 4, 574, 2, 0, 1, 2));
-        processes.add(new ExecutableProcess(1, 0, 3, 50, 0, 0, 0, 10));
-        processes.add(new ExecutableProcess(1, 0, 3, 62, 0, 0, 0, 0));
+        processes.add(new ExecutableProcess(0, 1, 7, 574, 2, 0, 1, 2));
+        //processes.add(new ExecutableProcess(1, 0, 3, 50, 0, 0, 0, 10));
+        // processes.add(new ExecutableProcess(1, 0, 3, 62, 0, 0, 0, 0));
 
         Scheduler[] scheduler = new Scheduler[4];
         scheduler[0] = new FCFS(device, 0);
@@ -27,28 +27,34 @@ public class Main {
         while (true) {
             //PROSESLERIN SIRALARA YERLESTIRILDIGI ALGORITMA BASLANGICI
             System.out.println("---------------------------------------------------------------------------------------");
-            System.out.println("zaman : " + time);
+            System.out.println("zaman : " + time + " - " + (time + 1) + " arasi");
             for (ExecutableProcess process : insufficientSourceList) {
                 if (device.tryAllocateForProcess(process)) {
                     scheduler[process.getPriority()].addToQueue(process);// Kaynak yetmezliginden dolayı sirada olan processler
                     insufficientSourceList.remove(process);
-                    System.out.println(process.getPriority() + ". priority sirasina eklendi ama yedekten");
+                    String sch = process.getPriority() == 0 ? "Gercek Zamanli (FCFS) " : process.getPriority() + ". Seviye Geri Beslemeli(Round Robin)";
+                    System.out.println("Bekleme sirasinda olan " +process.getPriority() + ". seviye öncelikli ve" + process.getBurstTime() +
+                            " islem suresine sahip olan prosesin IDsi " + process.getProcessID() + " olarak atandi ve " + sch + "İş sıralayıcıya yerleştirildi");
                 }   // Tekrardan Gorevlendirici sirasina yerlestirilmeye calisiliyor
             }
-            for (ExecutableProcess process : processes) {  //tum prosesler dolasiliyor
-                if (process.getArriveTime() == time) { // Eger prosesin zamani geldiyse
+            for (ExecutableProcess process : processes) {               //Tum prosesler dolasiliyor
+                if (process.getArriveTime() == time) {                  // Eger prosesin zamani geldiyse
                     if (device.tryAllocateForProcess(process)) {        //eger proses yeterli alana sahipse
-                        process.assignProcess();                    //prosese id atanir
-                        if(process.getPriority()<lastIteratedPriority)      //eger onceligi daha yuksekse kesme geldigini belirtir
+                        process.assignProcess();                        //prosese id atanir
+                        if (process.getPriority() < lastIteratedPriority)      //eger onceligi daha yuksekse kesme geldigini belirtir
                             System.out.println("Kesme Geldi (Daha yüksek öncelikli bir process geldi)");
-                        scheduler[process.getPriority()].addToQueue(process); //zamani gelen proses var ise queuya ekleniyor
-                        System.out.println(process.getPriority() + ". priority sirasina sahip " + process.getBurstTime() +
-                                " islem suresine sahip islemin processIDsi " + process.getProcessID() + " olarak atandi ");
-                    } else
+                        scheduler[process.getPriority()].addToQueue(process);   //zamani gelen proses var ise queuya ekleniyor
+                        String sch = process.getPriority() == 0 ? "Gercek Zamanli (FCFS) " : process.getPriority() + ". Seviye Geri Beslemeli(Round Robin)";
+                        System.out.println(process.getPriority() + ". seviye öncelikli ve" + process.getBurstTime() +
+                                " islem suresine sahip olan prosesin IDsi " + process.getProcessID() + " olarak atandi ve " + sch + "İş siralayiciya yerlestirildi");
+                    } else {
                         insufficientSourceList.add(process);
+                        System.out.println(process.getPriority() + " öncelikli " + process.getBurstTime() +
+                                " islem suresi olan proses yeterli kaynak olmadigindan bekleme sirasina alindi");
+                    }
                 }
             }
-            System.out.println("-----------------Gorevlendiriciye yerlestirme asamasi bitti--------------");
+            System.out.println("--------Is siralayiciya yerlestirme asamasi bitti------");
             // PROSESLERIN SIRAYA YERLESTIRILDIGI ALGORITMA SONU
 
             // PROSESLERIN EXECUTELANACAGI YER
@@ -63,7 +69,7 @@ public class Main {
             device.printResources();
             time++;
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (Exception e) {
                 System.out.println(e.toString());
             }
