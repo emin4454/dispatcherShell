@@ -17,6 +17,7 @@ public class RoundRobin extends Scheduler {
             if(aboutToExecuteProcess.getPriority()==1 || aboutToExecuteProcess.getPriority()==2) {
                 aboutToExecuteProcess.reducePriority();
                 schedulers[aboutToExecuteProcess.getPriority()].addToQueue(aboutToExecuteProcess);
+                System.out.println("Proses bir düşük öncelikli Geri Beslemeli seviyeye atandı(Yaşlandırıldı)");
             }
             else {
                 readyQueue.add(aboutToExecuteProcess);
