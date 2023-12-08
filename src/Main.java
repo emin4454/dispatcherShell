@@ -10,8 +10,8 @@ public class Main {
 
         LinkedList<ExecutableProcess> processes = new LinkedList<>();
         processes.add(new ExecutableProcess(0, 1, 7, 574, 2, 0, 1, 2));
-        //processes.add(new ExecutableProcess(1, 0, 3, 50, 0, 0, 0, 10));
-        // processes.add(new ExecutableProcess(1, 0, 3, 62, 0, 0, 0, 0));
+        processes.add(new ExecutableProcess(1, 0, 3, 50, 0, 0, 0, 10));
+        processes.add(new ExecutableProcess(1, 0, 3, 62, 0, 0, 0, 0));
 
         Scheduler[] scheduler = new Scheduler[4];
         scheduler[0] = new FCFS(device, 0);
@@ -53,7 +53,6 @@ public class Main {
                                 " islem suresi olan proses yeterli kaynak olmadigindan bekleme sirasina alindi");
                     }
                 }
-                else System.out.println("Bu zaman araliginda yeni islem gelmedi");
             }
             System.out.println("--------Is siralayiciya yerlestirme asamasi bitti------");
             // PROSESLERIN SIRAYA YERLESTIRILDIGI ALGORITMA SONU
@@ -70,7 +69,7 @@ public class Main {
             device.printResources();
             time++;
             try {
-                Thread.sleep(5000);
+                Thread.sleep(3000);
             } catch (Exception e) {
                 System.out.println(e.toString());
             }
