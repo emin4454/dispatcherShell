@@ -17,5 +17,5 @@ public class FCFS extends Scheduler {
             device.releaseResources(aboutToExecuteProcess);
             System.out.println("Proses bitti");
         }
-    }   //BURADA KALDIN
+    }
 }

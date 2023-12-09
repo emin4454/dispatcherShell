@@ -3,6 +3,12 @@ import java.util.List;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
+
+/*
+* Text dosyasindan processleri okuma sinifi yapilacak
+* Printler renkli yapilacak ve düzenlenecek
+* Kod Test edilecek
+* */
 public class Main {
     public static void main(String[] args) {
 
@@ -58,9 +64,9 @@ public class Main {
             }
             if (!isAdded)
                 System.out.println("Bu zaman diliminde hic yeni process gelmedi");
+            device.printResources();
             System.out.println("--------Is siralayiciya yerlestirme asamasi bitti------");
             // PROSESLERIN SIRAYA YERLESTIRILDIGI ALGORITMA SONU
-            device.printResources();
             // PROSESLERIN EXECUTELANACAGI YER
             for (int i = 0; i < 4; i++) {
                 if (!scheduler[i].isListEmpty()) {

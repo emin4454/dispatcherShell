@@ -1,5 +1,4 @@
 public class RoundRobin extends Scheduler {
-    //BURADA KALDIN
     RoundRobin(Device device, int priorityLevel) {
         super(device);
         this.priorityLevel = priorityLevel;
