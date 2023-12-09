@@ -37,8 +37,10 @@ public class Main {
                             " islem suresine sahip olan prosesin IDsi " + process.getProcessID() + " olarak atandi ve " + sch + "İş sıralayıcıya yerleştirildi");
                 }   // Tekrardan Gorevlendirici sirasina yerlestirilmeye calisiliyor
             }
+            boolean isAdded = false;
             for (ExecutableProcess process : processes) {               //Tum prosesler dolasiliyor
                 if (process.getArriveTime() == time) {                  // Eger prosesin zamani geldiyse
+                    isAdded = true;
                     if (device.tryAllocateForProcess(process)) {        //eger proses yeterli alana sahipse
                         process.assignProcess();                        //prosese id atanir
                         if (process.getPriority() < lastIteratedPriority)      //eger onceligi daha yuksekse kesme geldigini belirtir
@@ -50,13 +52,15 @@ public class Main {
                     } else {
                         insufficientSourceList.add(process);
                         System.out.println(process.getPriority() + " öncelikli " + process.getBurstTime() +
-                                " islem suresi olan proses yeterli kaynak olmadigindan bekleme sirasina alindi");
+                                " islem suresi olan proses geldi ama yeterli kaynak olmadigindan bekleme sirasina alindi");
                     }
                 }
             }
+            if (!isAdded)
+                System.out.println("Bu zaman diliminde hic yeni process gelmedi");
             System.out.println("--------Is siralayiciya yerlestirme asamasi bitti------");
             // PROSESLERIN SIRAYA YERLESTIRILDIGI ALGORITMA SONU
-
+            device.printResources();
             // PROSESLERIN EXECUTELANACAGI YER
             for (int i = 0; i < 4; i++) {
                 if (!scheduler[i].isListEmpty()) {
@@ -65,15 +69,13 @@ public class Main {
                     break;
                 }
             }
-
-            device.printResources();
+            System.out.println("---------------------------------------------------------------------------------------");
             time++;
             try {
                 Thread.sleep(3000);
             } catch (Exception e) {
                 System.out.println(e.toString());
             }
-            System.out.println("---------------------------------------------------------------------------------------");
         }
     }
 }
