@@ -8,6 +8,7 @@ import java.util.List;
 * Text dosyasindan processleri okuma sinifi yapilacak
 * Printler renkli yapilacak ve düzenlenecek
 * Kod Test edilecek
+* bellek konumu
 * */
 public class Main {
     public static void main(String[] args) {
@@ -15,9 +16,10 @@ public class Main {
         Device device = new Device();   // cihaz olusturuluyor
 
         LinkedList<ExecutableProcess> processes = new LinkedList<>();
+        processes.add(new ExecutableProcess(4, 2, 7, 10, 0, 0, 0, 0));
         processes.add(new ExecutableProcess(0, 1, 7, 574, 2, 0, 1, 2));
         processes.add(new ExecutableProcess(1, 0, 3, 50, 0, 0, 0, 10));
-        processes.add(new ExecutableProcess(1, 0, 3, 62, 0, 0, 0, 0));
+        processes.add(new ExecutableProcess(2, 0, 5, 62, 0, 0, 0, 0));
 
         Scheduler[] scheduler = new Scheduler[4];
         scheduler[0] = new FCFS(device, 0);

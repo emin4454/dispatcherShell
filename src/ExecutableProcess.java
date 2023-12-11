@@ -64,7 +64,7 @@ public class ExecutableProcess {
 
     public boolean executeOneTimeUnit() {
         burstTime--;
-        return burstTime == 0;
+        return burstTime <= 0;
     }
     public void reducePriority(){
         priority++;
