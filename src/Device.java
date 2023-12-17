@@ -1,6 +1,6 @@
 public class Device {
     private int availableMemRR = 960;    // Makinenin sahip oldugu bellek miktari
-    private int availableMemFCFS = 64;
+    private int availableMemFCFS = 64;  //Makinenin sahip olduğu FCFS alanı
     private int availablePrinter = 2;// Makinenin sahip oldugu yazici sayisi
     private int availableScanner = 1;//  Makinenin sahip oldugu tarayici sayisi
     private int availableRouter = 1;//  Makinenin sahip oldugu Modem sayisi
