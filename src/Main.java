@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -12,8 +13,11 @@ import java.util.Queue;
 * bellek konumu
 * */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
+
+        ReadFile readtxt = new ReadFile("giris.txt");
+        readtxt.ReadTheFile();
         Device device = new Device();   // cihaz olusturuluyor
 
         LinkedList<ExecutableProcess> processes = new LinkedList<>();
