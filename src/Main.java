@@ -22,9 +22,9 @@ public class Main {
         processes.add(new ExecutableProcess(1, 0, 3, 50, 0, 0, 0, 10));
         processes.add(new ExecutableProcess(2, 0, 5, 62, 0, 0, 0, 0));
 
-        Scheduler[] scheduler = new Scheduler[4];
-        scheduler[0] = new FCFS(device, 0);
-        scheduler[1] = new RoundRobin(device, 1);       // Cihaz icin 4 tane gorevlendirici olusturuluyor
+        Scheduler[] scheduler = new Scheduler[4];       // Cihaz icin 4 tane gorevlendirici olusturuluyor
+        scheduler[0] = new FCFS(device, 0);             //FCFS
+        scheduler[1] = new RoundRobin(device, 1);       // roundrobinler
         scheduler[2] = new RoundRobin(device, 2);
         scheduler[3] = new RoundRobin(device, 3);
 
@@ -52,7 +52,7 @@ public class Main {
             boolean isAdded = false;
             for (ExecutableProcess process : processes) {               //Tum prosesler dolasiliyor
                 if (process.getArriveTime() == time) {                  // Eger prosesin zamani geldiyse
-                    isAdded = true;
+                    isAdded = true;                                     // eğer eklendiyse true
                     if (device.tryAllocateForProcess(process)) {        //eger proses yeterli alana sahipse
                         process.assignProcess();                        //prosese id atanir
                         if (process.getPriority() < lastIteratedPriority)      //eger onceligi daha yuksekse kesme geldigini belirtir
@@ -62,7 +62,7 @@ public class Main {
                         System.out.println(process.getPriority() + ". seviye öncelikli ve " + process.getBurstTime() +
                                 " islem suresine sahip olan prosesin IDsi " + process.getProcessID() + " olarak atandi ve " + sch + "İş siralayiciya yerlestirildi");
                     } else {
-                        insufficientSourceList.add(process);
+                        insufficientSourceList.add(process);   
                         System.out.println(process.getPriority() + " öncelikli " + process.getBurstTime() +    //Eger yeterli alan yoksa bekleme sirasina aliniyor
                                 " islem suresi olan proses geldi ama yeterli kaynak olmadigindan bekleme sirasina alindi");
                     }
@@ -70,7 +70,7 @@ public class Main {
             }
             if (!isAdded)
                 System.out.println("Bu zaman diliminde hic yeni process gelmedi");
-            device.printResources();
+            device.printResources();    // cihazın kalan kaynakları yazılıyor
             System.out.println("--------Is siralayiciya yerlestirme asamasi bitti------");
             // PROSESLERIN SIRAYA YERLESTIRILDIGI ALGORITMA SONU
             for(int i = 0; i<4 ; i++){
@@ -78,9 +78,9 @@ public class Main {
             }
             // PROSESLERIN EXECUTELANDIĞI YER
             for (int i = 0; i < 4; i++) {
-                if (!scheduler[i].isListEmpty()) {
+                if (!scheduler[i].isListEmpty()) {   // hazır listesi boş ise
                     scheduler[i].executeOneIteration(scheduler);        //En yuksek oncelikli process 1 iterasyon calistiriliyor
-                    lastIteratedPriority = i;
+                    lastIteratedPriority = i;   // kesme kontrolü için  son itterasyona eşitlenir 
                     break;
                 }
             }
@@ -88,7 +88,7 @@ public class Main {
             time++;  //Zaman 1 arrtiriliyor
             try {
                 Thread.sleep(3000);         // 1 saniye bekleniliyor
-            } catch (Exception e) {
+            } catch (Exception e) {   //eğer hata var ise hatayı yazdır
                 System.out.println(e.toString());
             }
         }
