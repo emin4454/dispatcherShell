@@ -84,6 +84,8 @@ public class ExecutableProcess {
                 ", Gerekli Yazici=" + requiredPrinter +
                 ", Gerekli Tarayici=" + requiredScanner +
                 ", Gerekli Modem=" + requiredRouter +
-                ", Gerekli CD/DVD=" + requiredCDROM;
+                ", Gerekli CD/DVD=" + requiredCDROM+
+            ", Yaşadığı zaman=" + aliveTime ;
+
     }
 }

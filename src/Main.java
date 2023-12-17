@@ -1,5 +1,6 @@
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
@@ -28,6 +29,8 @@ public class Main {
         scheduler[3] = new RoundRobin(device, 3);
 
         List<ExecutableProcess> insufficientSourceList = new LinkedList<>(); //yetersiz kaynak listesi
+
+        Queue<ExecutableProcess> timeOutQueue = new LinkedList<>();
 
         int time = 0; // zaman tanimlaniyor
         int lastIteratedPriority = 0; //Kesme geldigini anlamak icin tanimlaniyor
@@ -60,7 +63,7 @@ public class Main {
                                 " islem suresine sahip olan prosesin IDsi " + process.getProcessID() + " olarak atandi ve " + sch + "İş siralayiciya yerlestirildi");
                     } else {
                         insufficientSourceList.add(process);
-                        System.out.println(process.getPriority() + " öncelikli " + process.getBurstTime() +
+                        System.out.println(process.getPriority() + " öncelikli " + process.getBurstTime() +    //Eger yeterli alan yoksa bekleme sirasina aliniyor
                                 " islem suresi olan proses geldi ama yeterli kaynak olmadigindan bekleme sirasina alindi");
                     }
                 }
@@ -70,18 +73,21 @@ public class Main {
             device.printResources();
             System.out.println("--------Is siralayiciya yerlestirme asamasi bitti------");
             // PROSESLERIN SIRAYA YERLESTIRILDIGI ALGORITMA SONU
-            // PROSESLERIN EXECUTELANACAGI YER
+            for(int i = 0; i<4 ; i++){
+                scheduler[i].increaseAliveTimeAllQueue(timeOutQueue);   //Processlerin yasadigi zaman 1 arttiriliyor
+            }
+            // PROSESLERIN EXECUTELANDIĞI YER
             for (int i = 0; i < 4; i++) {
                 if (!scheduler[i].isListEmpty()) {
-                    scheduler[i].executeOneIteration(scheduler);
+                    scheduler[i].executeOneIteration(scheduler);        //En yuksek oncelikli process 1 iterasyon calistiriliyor
                     lastIteratedPriority = i;
                     break;
                 }
             }
             System.out.println("---------------------------------------------------------------------------------------");
-            time++;
+            time++;  //Zaman 1 arrtiriliyor
             try {
-                Thread.sleep(3000);
+                Thread.sleep(3000);         // 1 saniye bekleniliyor
             } catch (Exception e) {
                 System.out.println(e.toString());
             }
