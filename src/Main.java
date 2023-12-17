@@ -27,7 +27,7 @@ public class Main {
         scheduler[2] = new RoundRobin(device, 2);
         scheduler[3] = new RoundRobin(device, 3);
 
-        List<ExecutableProcess> insufficientSourceList = new LinkedList<>();
+        List<ExecutableProcess> insufficientSourceList = new LinkedList<>(); //yetersiz kaynak listesi
 
         int time = 0; // zaman tanimlaniyor
         int lastIteratedPriority = 0; //Kesme geldigini anlamak icin tanimlaniyor
@@ -38,6 +38,7 @@ public class Main {
             System.out.println("zaman : " + time + " - " + (time + 1) + " arasi");
             for (ExecutableProcess process : insufficientSourceList) {
                 if (device.tryAllocateForProcess(process)) {
+                    process.assignProcess();
                     scheduler[process.getPriority()].addToQueue(process);// Kaynak yetmezliginden dolayı sirada olan processler
                     insufficientSourceList.remove(process);
                     String sch = process.getPriority() == 0 ? "Gercek Zamanli (FCFS) " : process.getPriority() + ". Seviye Geri Beslemeli(Round Robin)";
