@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -16,15 +17,10 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
 
-        ReadFile readtxt = new ReadFile("giris.txt");
-        readtxt.ReadTheFile();
+        ReadFile readfile = new ReadFile("giris.txt");
         Device device = new Device();   // cihaz olusturuluyor
 
-        LinkedList<ExecutableProcess> processes = new LinkedList<>();
-        processes.add(new ExecutableProcess(4, 2, 7, 10, 0, 0, 0, 0));
-        processes.add(new ExecutableProcess(0, 1, 7, 574, 2, 0, 1, 2));
-        processes.add(new ExecutableProcess(1, 0, 3, 50, 0, 0, 0, 10));
-        processes.add(new ExecutableProcess(2, 0, 5, 62, 0, 0, 0, 0));
+        LinkedList<ExecutableProcess> processes = readfile.ReadTheFile();
 
         Scheduler[] scheduler = new Scheduler[4];       // Cihaz icin 4 tane gorevlendirici olusturuluyor
         scheduler[0] = new FCFS(device, 0);             //FCFS
@@ -43,11 +39,13 @@ public class Main {
             //PROSESLERIN SIRALARA YERLESTIRILDIGI ALGORITMA BASLANGICI
             System.out.println("---------------------------------------------------------------------------------------");
             System.out.println("zaman : " + time + " - " + (time + 1) + " arasi");
-            for (ExecutableProcess process : insufficientSourceList) {
+            Iterator<ExecutableProcess> iterator  = insufficientSourceList.iterator();
+            while(iterator.hasNext()){
+                ExecutableProcess process = iterator.next();
                 if (device.tryAllocateForProcess(process)) {
                     process.assignProcess();
+                    iterator.remove();
                     scheduler[process.getPriority()].addToQueue(process);// Kaynak yetmezliginden dolayı sirada olan processler
-                    insufficientSourceList.remove(process);
                     String sch = process.getPriority() == 0 ? "Gercek Zamanli (FCFS) " : process.getPriority() + ". Seviye Geri Beslemeli(Round Robin)";
                     System.out.println("Bekleme sirasinda olan " +process.getPriority() + ". seviye öncelikli ve " + process.getBurstTime() +
                             " islem suresine sahip olan prosesin IDsi " + process.getProcessID() + " olarak atandi ve " + sch + "İş sıralayıcıya yerleştirildi");
@@ -66,7 +64,7 @@ public class Main {
                         System.out.println(process.getPriority() + ". seviye öncelikli ve " + process.getBurstTime() +
                                 " islem suresine sahip olan prosesin IDsi " + process.getProcessID() + " olarak atandi ve " + sch + "İş siralayiciya yerlestirildi");
                     } else {
-                        insufficientSourceList.add(process);   
+                        insufficientSourceList.add(process);
                         System.out.println(process.getPriority() + " öncelikli " + process.getBurstTime() +    //Eger yeterli alan yoksa bekleme sirasina aliniyor
                                 " islem suresi olan proses geldi ama yeterli kaynak olmadigindan bekleme sirasina alindi");
                     }
