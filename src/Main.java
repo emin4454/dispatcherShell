@@ -78,6 +78,9 @@ public class Main {
             for(int i = 0; i<4 ; i++){
                 scheduler[i].increaseAliveTimeAllQueue(timeOutQueue);   //Processlerin yasadigi zaman 1 arttiriliyor
             }
+            if(!timeOutQueue.isEmpty()){
+                
+            }
             // PROSESLERIN EXECUTELANDIĞI YER
             for (int i = 0; i < 4; i++) {
                 if (!scheduler[i].isListEmpty()) {   // hazır listesi boş ise
@@ -89,7 +92,7 @@ public class Main {
             System.out.println("---------------------------------------------------------------------------------------");
             time++;  //Zaman 1 arrtiriliyor
             try {
-                Thread.sleep(3000);         // 1 saniye bekleniliyor
+                Thread.sleep(500);         // 1 saniye bekleniliyor
             } catch (Exception e) {   //eğer hata var ise hatayı yazdır
                 System.out.println(e.toString());
             }
