@@ -80,7 +80,6 @@ public class Main {
             }
             if(!timeOutQueue.isEmpty()){
                 ExecutableProcess process = timeOutQueue.poll();
-                process.increaseAliveTime();
                 device.releaseResources(process);
                 System.out.println("20 saniye zaman asimini dolduran proses sona erdirilmeden 1 kez calismasina izin veriliyor");
                 System.out.println(process);
