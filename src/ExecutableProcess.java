@@ -64,7 +64,7 @@ public class ExecutableProcess {
 
     public boolean increaseAliveTime(){
         aliveTime++;
-        return aliveTime >= 19;
+        return aliveTime >= 20;
     }
     public boolean executeOneTimeUnit() {
         burstTime--;
