@@ -79,14 +79,19 @@ public class Main {
                 scheduler[i].increaseAliveTimeAllQueue(timeOutQueue);   //Processlerin yasadigi zaman 1 arttiriliyor
             }
             if(!timeOutQueue.isEmpty()){
-                
+                ExecutableProcess process = timeOutQueue.poll();
+                process.increaseAliveTime();
+                device.releaseResources(process);
+                System.out.println("20 saniye zaman asimini dolduran proses sona erdirilmeden 1 kez calismasina izin veriliyor");
+                System.out.println(process);
             }
-            // PROSESLERIN EXECUTELANDIĞI YER
-            for (int i = 0; i < 4; i++) {
-                if (!scheduler[i].isListEmpty()) {   // hazır listesi boş ise
-                    scheduler[i].executeOneIteration(scheduler);        //En yuksek oncelikli process 1 iterasyon calistiriliyor
-                    lastIteratedPriority = i;   // kesme kontrolü için  son itterasyona eşitlenir 
-                    break;
+            else {              // PROSESLERIN EXECUTELANDIĞI YER
+                for (int i = 0; i < 4; i++) {
+                    if (!scheduler[i].isListEmpty()) {   // hazır listesi boş ise
+                        scheduler[i].executeOneIteration(scheduler);        //En yuksek oncelikli process 1 iterasyon calistiriliyor
+                        lastIteratedPriority = i;   // kesme kontrolü için  son itterasyona eşitlenir
+                        break;
+                    }
                 }
             }
             System.out.println("---------------------------------------------------------------------------------------");
