@@ -28,10 +28,17 @@ public abstract class Scheduler {
 
     public void increaseAliveTimeAllQueue(Queue<ExecutableProcess> timeOutList) {
         if (!isListEmpty()) {
-            ExecutableProcess firstItem = readyQueue.poll();
-            firstItem.increaseAliveTime();
-            readyQueue.add(firstItem);
-            while (firstItem != readyQueue.peek()) {
+            ExecutableProcess firstItem;
+            while(true){
+                firstItem = readyQueue.poll();
+                if(firstItem.increaseAliveTime())                   //Hatali buraya bak
+                {
+                    timeOutList.add(firstItem);
+                    break;
+                }
+                readyQueue.add(firstItem);
+            }
+            while (firstItem != readyQueue.peek() && !isListEmpty()) {
                 ExecutableProcess item = readyQueue.poll();
                 if(item.increaseAliveTime()){
                     timeOutList.add(item);
