@@ -37,43 +37,43 @@ public class Main {
 
         while (true) {
             //PROSESLERIN SIRALARA YERLESTIRILDIGI ALGORITMA BASLANGICI
-            System.out.println("---------------------------------------------------------------------------------------");
-            System.out.println("zaman : " + time + " - " + (time + 1) + " arasi");
-            Iterator<ExecutableProcess> iterator  = insufficientSourceList.iterator();
-            while(iterator.hasNext()){
-                ExecutableProcess process = iterator.next();
-                if (device.tryAllocateForProcess(process)) {
-                    process.assignProcess();
-                    iterator.remove();
-                    scheduler[process.getPriority()].addToQueue(process);// Kaynak yetmezliginden dolayı sirada olan processler
-                    String sch = process.getPriority() == 0 ? "Gercek Zamanli (FCFS) " : process.getPriority() + ". Seviye Geri Beslemeli(Round Robin)";
-                    System.out.println("Bekleme sirasinda olan " +process.getPriority() + ". seviye öncelikli ve " + process.getBurstTime() +
-                            " islem suresine sahip olan prosesin IDsi " + process.getProcessID() + " olarak atandi ve " + sch + "İş sıralayıcıya yerleştirildi");
-                }   // Tekrardan Gorevlendirici sirasina yerlestirilmeye calisiliyor
-            }
+//            System.out.println("---------------------------------------------------------------------------------------");
+//            System.out.println("zaman : " + time + " - " + (time + 1) + " arasi");
+//            Iterator<ExecutableProcess> iterator  = insufficientSourceList.iterator();
+//            while(iterator.hasNext()){
+//                ExecutableProcess process = iterator.next();                                      //PROGRAM CIKTISINDAN DOLAYI BU KODLARIN CALISMASINA GEREK KALMADI
+//                if (device.tryAllocateForProcess(process)) {
+//                    process.assignProcess();
+//                    iterator.remove();
+//                    scheduler[process.getPriority()].addToQueue(process);// Kaynak yetmezliginden dolayı sirada olan processler
+//                    String sch = process.getPriority() == 0 ? "Gercek Zamanli (FCFS) " : process.getPriority() + ". Seviye Geri Beslemeli(Round Robin)";
+//                    System.out.println("Bekleme sirasinda olan " +process.getPriority() + ". seviye öncelikli ve " + process.getBurstTime() +
+//                            " islem suresine sahip olan prosesin IDsi " + process.getProcessID() + " olarak atandi ve " + sch + "İş sıralayıcıya yerleştirildi");
+//                }   // Tekrardan Gorevlendirici sirasina yerlestirilmeye calisiliyor
+//            }
             boolean isAdded = false;
+            boolean skipToNextSecond = false;
             for (ExecutableProcess process : processes) {               //Tum prosesler dolasiliyor
-                if (process.getArriveTime() == time) {                  // Eger prosesin zamani geldiyse
-                    isAdded = true;                                     // eğer eklendiyse true
-                    if (device.tryAllocateForProcess(process)) {        //eger proses yeterli alana sahipse
-                        process.assignProcess();                        //prosese id atanir
-                        if (process.getPriority() < lastIteratedPriority)      //eger onceligi daha yuksekse kesme geldigini belirtir
-                            System.out.println("Kesme Geldi (Daha yüksek öncelikli bir process geldi)");
-                        scheduler[process.getPriority()].addToQueue(process);   //zamani gelen proses var ise queuya ekleniyor
-                        String sch = process.getPriority() == 0 ? "Gercek Zamanli (FCFS) " : process.getPriority() + ". Seviye Geri Beslemeli(Round Robin)";
-                        System.out.println(process.getPriority() + ". seviye öncelikli ve " + process.getBurstTime() +
-                                " islem suresine sahip olan prosesin IDsi " + process.getProcessID() + " olarak atandi ve " + sch + "İş siralayiciya yerlestirildi");
-                    } else {
-                        insufficientSourceList.add(process);
-                        System.out.println(process.getPriority() + " öncelikli " + process.getBurstTime() +    //Eger yeterli alan yoksa bekleme sirasina aliniyor
-                                " islem suresi olan proses geldi ama yeterli kaynak olmadigindan bekleme sirasina alindi");
+                if (process.getArriveTime() == time) {                       // Eger prosesin zamani geldiyse
+                    isAdded = true;
+                    if(device.isDeviceEnoughForAllocate(process)) {         // eğer eklendiyse true
+                        if (device.tryAllocateForProcess(process)) {        //eger proses yeterli alana sahipse
+                            process.assignProcess();                        //prosese id atanir
+                            if (process.getPriority() < lastIteratedPriority)      //eger onceligi daha yuksekse kesme geldigini belirtir
+                                //System.out.println("Kesme Geldi (Daha yüksek öncelikli bir process geldi)");
+                                scheduler[process.getPriority()].addToQueue(process);   //zamani gelen proses var ise queuya ekleniyor
+                            } else {
+                                System.out.println("HATA - Proses çok sayıda kaynak talep ediyor - proses silindi");
+                                skipToNextSecond =true;
+                                break;
+                        }
                     }
                 }
             }
-            if (!isAdded)
-                System.out.println("Bu zaman diliminde hic yeni process gelmedi");
-            device.printResources();    // cihazın kalan kaynakları yazılıyor
-            System.out.println("--------Is siralayiciya yerlestirme asamasi bitti------");
+            if(skipToNextSecond){
+                time++;
+                continue;
+            }
             // PROSESLERIN SIRAYA YERLESTIRILDIGI ALGORITMA SONU
             for(int i = 0; i<4 ; i++){
                 scheduler[i].increaseAliveTimeAllQueue(timeOutQueue);   //Processlerin yasadigi zaman 1 arttiriliyor
@@ -82,7 +82,7 @@ public class Main {
                 ExecutableProcess process = timeOutQueue.poll();
                 device.releaseResources(process);
                 System.out.println("20 saniye zaman asimini dolduran proses sona erdirilmeden 1 kez calismasina izin veriliyor");
-                System.out.println(process);
+
             }
             else {              // PROSESLERIN EXECUTELANDIĞI YER
                 for (int i = 0; i < 4; i++) {

@@ -10,6 +10,13 @@ public class Device {
 
     }
 
+    boolean isDeviceEnoughForAllocate(ExecutableProcess process){
+        if (process.getRequiredMem() > availableMemRR || process.getRequiredPrinter() > availablePrinter || process.getRequiredScanner() > availableScanner || process.getRequiredRouter() > availableRouter || process.getRequiredCDROM() > availableCDROM){
+            System.out.println("HATA - Proses çok sayıda kaynak talep ediyor - proses silindi");
+            return false;
+        }
+        else return true;
+    }
     boolean tryAllocateForProcess(ExecutableProcess process) {
         if (process.getPriority() == 0 ) {
             if(process.getRequiredMem() <= availableMemFCFS) {
