@@ -9,13 +9,13 @@ public class FCFS extends Scheduler {
 
     public void executeOneIteration(Scheduler[] schedulers) {
         ExecutableProcess aboutToExecuteProcess = readyQueue.peek(); //Sıradaki proses alınıyor
-        printSchedulerInfo();  //Proses bilgileri yazdırılıyor
-        System.out.println("Process 1 saniye calisti");
-        System.out.println("Calisan " + aboutToExecuteProcess.toString());
         if (aboutToExecuteProcess.executeOneTimeUnit()) {
             readyQueue.poll();// Eger true donerse proses bitmis demektir
             device.releaseResources(aboutToExecuteProcess); //Kaynaklar serbest bırakılıyor
-            System.out.println("Proses bitti");
+            aboutToExecuteProcess.setProcessStatus("COMPLETED");
+        }
+        else{
+            aboutToExecuteProcess.setProcessStatus("RUNNING");
         }
     }
 }

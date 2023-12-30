@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 public class Device {
     private int availableMemRR = 960;    // Makinenin sahip oldugu bellek miktari
     private int availableMemFCFS = 64;  //Makinenin sahip olduğu FCFS alanı
@@ -6,22 +8,22 @@ public class Device {
     private int availableRouter = 1;//  Makinenin sahip oldugu Modem sayisi
     private int availableCDROM = 2;// Makinenin sahip oldugu cd/dvd sayisi
 
+    private LinkedList<ExecutableProcess> allArrivedProcessList = new LinkedList<>();
     Device() {
 
     }
-
     boolean tryAllocateForProcess(ExecutableProcess process) {
         if (process.getPriority() == 0 ) {
-            if(process.getRequiredMem() <= availableMemFCFS) {
-                allocateMemoryFCFS(process.getRequiredMem());
+            if(process.getRequiredMem() <= availableMemFCFS && process.getRequiredPrinter() <= 0 && process.getRequiredScanner() <= 0 && process.getRequiredRouter() <= 0 && process.getRequiredCDROM() <= 0) {
+/*                allocateMemoryFCFS(process.getRequiredMem());*/
                 return true;
             }else return false;
         } else {
             if (process.getRequiredMem() <= availableMemRR && process.getRequiredPrinter() <= availablePrinter && process.getRequiredScanner() <= availableScanner && process.getRequiredRouter() <= availableRouter && process.getRequiredCDROM() <= availableCDROM) {
-                allocateMemoryRR(process.getRequiredMem());
+/*                allocateMemoryRR(process.getRequiredMem());
                 usePrinter(process.getRequiredPrinter());
                 useScanner(process.getRequiredScanner());
-                useCDROM(process.getRequiredCDROM());
+                useCDROM(process.getRequiredCDROM());*/
                 return true;
             } else return false;
         }
@@ -36,6 +38,23 @@ public class Device {
             releaseRouter(process.getRequiredRouter());
             releaseCDROM(process.getRequiredCDROM());
         }
+    }
+    public  void printAllArrivedProcesses(int time) {
+        System.out.println(time);
+        System.out.printf("| %3s | %5s | %7s | %6s | %3s | %3s | %3s | %3s | %3s | %6s | %11s |%n", "pid", "varış", "öncelik" , "kzaman", "mem" , "prn","scn","mdm","cd","Yzaman","status");
+        System.out.println("================================================================================================");
+        for (ExecutableProcess process : allArrivedProcessList) {
+            if (process.getProcessStatus() == "ERROR") {
+                System.out.printf("| %-3d |", process.getProcessID());
+                System.out.println(process.getProcessString());
+            } else {
+                System.out.printf("| %-3d | %-5d | %-7d | %-6d | %-3d | %-3d | %-3d | %-3d | %-3d | %-6d | %-11s |%n",
+                        process.getProcessID(),process.getArriveTime(), process.getPriority(), process.getBurstTime(), process.getRequiredMem(),process.getRequiredPrinter(), process.getRequiredScanner(), process.getRequiredRouter(), process.getRequiredCDROM(),process.getAliveTime(), process.getProcessStatus());
+            }
+        }
+    }
+    public void addToArrivedProcessList(ExecutableProcess process){
+        allArrivedProcessList.add(process);
     }
     public void printResources(){
         System.out.println("Kalan Kullanilabilir RR alani :" + this.getAvailableMemRR() + " Mbyte");
