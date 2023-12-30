@@ -38,4 +38,15 @@ public abstract class Scheduler {
             }
         }
     }
+
+    public void suspendAllProcesses(){
+        if (!isListEmpty()) {
+            for (int i = 0; i < readyQueue.size(); i++) {
+                ExecutableProcess item = readyQueue.poll();
+                if(item.getProcessStatus() != "READY");
+                item.setProcessStatus("WAITING");
+                readyQueue.add(item);
+            }
+        }
+    }
 }

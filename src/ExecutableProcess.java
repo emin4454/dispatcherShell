@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+
+
 public class ExecutableProcess {
 
     private static int assignedProcessCounter = 0; //Proses Id için proses sayıcı
@@ -11,6 +14,15 @@ public class ExecutableProcess {
     private int requiredRouter;// Prosesin ihtiyac duydugu Modem sayisi
     private int requiredCDROM;//Prosesin ihtiyac duydugu cd/dvd sayisi
     private int aliveTime;   //Prosesin yaşadığı süre
+    private String processStatus = "";
+
+    public int getAliveTime() {
+        return aliveTime;
+    }
+
+    private String processString = "";
+
+
 
     public ExecutableProcess(int arriveTime, int priority, int burstTime, int requiredMem, int requiredPrinter, int requiredScanner, int requiredRouter, int requiredCD) {
         this.arriveTime = arriveTime;
@@ -22,10 +34,29 @@ public class ExecutableProcess {
         this.requiredRouter = requiredRouter;
         this.requiredCDROM = requiredCD;
     }
-    public void assignProcess(){
+
+    public void setProcessStatus(String processStatus) {
+        this.processStatus = processStatus;
+    }
+
+    public void setProcessString(String processString) {
+        this.processString = processString;
+    }
+
+    public void assignProcess(Device device) {
         processid = assignedProcessCounter;
         assignedProcessCounter++;
+        device.addToArrivedProcessList(this);
     }
+
+    public String getProcessStatus() {
+        return processStatus;
+    }
+
+    public String getProcessString() {
+        return processString;
+    }
+
     public int getPriority() {
         return priority;
     }
@@ -62,30 +93,35 @@ public class ExecutableProcess {
         return processid;
     }
 
-    public boolean increaseAliveTime(){
+    public boolean increaseAliveTime() {
         aliveTime++;
         return aliveTime >= 20;
     }
+
     public boolean executeOneTimeUnit() {
         burstTime--;
         return burstTime <= 0;
     }
-    public void reducePriority(){
+
+    public void reducePriority() {
         priority++;
     }
+
+
+
     @Override
     public String toString() {
-        return "Prosesin Bilgileri  " +
-                "ID=" + processid +
-                ", Gelis Zamani=" + arriveTime +
-                ", Oncelik=" + priority +
-                ", Islem Suresi=" + burstTime +
-                ", Gerekli Hafiza=" + requiredMem +
-                ", Gerekli Yazici=" + requiredPrinter +
-                ", Gerekli Tarayici=" + requiredScanner +
-                ", Gerekli Modem=" + requiredRouter +
-                ", Gerekli CD/DVD=" + requiredCDROM+
-            ", Yaşadığı zaman=" + aliveTime ;
+        return
+                processid +
+                        " " + arriveTime +
+                        " " + priority +
+                        " " + burstTime +
+                        " " + requiredMem +
+                        " " + requiredPrinter +
+                        " " + requiredScanner +
+                        " " + requiredRouter +
+                        " " + requiredCDROM +
+                        " " + aliveTime;
 
     }
 }
