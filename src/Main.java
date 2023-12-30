@@ -22,8 +22,8 @@ public class Main {
 
         Scheduler[] scheduler = new Scheduler[4];       // Cihaz icin 4 tane gorevlendirici olusturuluyor
         scheduler[0] = new FCFS(device, 0);             //FCFS
-        scheduler[1] = new RoundRobin(device, 1);       // roundrobinler
-        scheduler[2] = new RoundRobin(device, 2);
+        scheduler[1] = new GBG(device, 1);       // roundrobinler
+        scheduler[2] = new GBG(device, 2);
         scheduler[3] = new RoundRobin(device, 3);
 
         Queue<ExecutableProcess> timeOutQueue = new LinkedList<>();
