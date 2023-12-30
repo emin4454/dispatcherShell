@@ -50,7 +50,7 @@ public class Main {
                 ExecutableProcess process = timeOutQueue.poll();
                 device.releaseResources(process);
                 process.setProcessStatus("ERROR");
-                process.setProcessString("HATA - Proses zaman aşımı (20 sn de tamamlanamadı)");
+                process.setProcessString(" HATA - Proses zaman aşımı (20 sn de tamamlanamadı)");
             } else {              // PROSESLERIN EXECUTELANDIĞI YER
                 for (int i = 0; i < 4; i++) {
                     if (!scheduler[i].isListEmpty()) {   // hazır listesi boş degil ise
