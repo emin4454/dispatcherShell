@@ -9,28 +9,50 @@ public class Device {
     private int availableCDROM = 2;// Makinenin sahip oldugu cd/dvd sayisi
 
     private LinkedList<ExecutableProcess> allArrivedProcessList = new LinkedList<>();
+
     Device() {
 
     }
+
     boolean tryAllocateForProcess(ExecutableProcess process) {
-        if (process.getPriority() == 0 ) {
-            if(process.getRequiredMem() <= availableMemFCFS && process.getRequiredPrinter() <= 0 && process.getRequiredScanner() <= 0 && process.getRequiredRouter() <= 0 && process.getRequiredCDROM() <= 0) {
-/*                allocateMemoryFCFS(process.getRequiredMem());*/                   //ORNEK CIKTISINDAN DOLAYI BELLEK TAHSISI DEGISTI !!!
-                return true;
-            }else return false;
+        if (process.getPriority() == 0) {
+            if (process.getRequiredMem() <= availableMemFCFS) // {
+            {
+                if (process.getRequiredPrinter() <= 0 && process.getRequiredScanner() <= 0 && process.getRequiredRouter() <= 0 && process.getRequiredCDROM() <= 0) {
+                    return true;
+                    /*{}allocateMemoryFCFS(process.getRequiredMem());*/
+                } else {
+                    process.setProcessString(" HATA - Gerçek-zamanlı proses çok sayıda kaynak talep ediyor - proses silindi");
+                    return false;
+                }
+            } else {
+                process.setProcessString(" HATA - Gerçek-zamanlı proses (64MB) tan daha fazla bellek talep ediyor - proses silindi");
+                return false;
+            }
         } else {
-            if (process.getRequiredMem() <= availableMemRR && process.getRequiredPrinter() <= availablePrinter && process.getRequiredScanner() <= availableScanner && process.getRequiredRouter() <= availableRouter && process.getRequiredCDROM() <= availableCDROM) {
-/*                allocateMemoryRR(process.getRequiredMem());
+            if (process.getRequiredMem() <= availableMemRR) {
+                if (process.getRequiredPrinter() <= availablePrinter && process.getRequiredScanner() <= availableScanner && process.getRequiredRouter() <= availableRouter && process.getRequiredCDROM() <= availableCDROM) {
+                    return true;
+                    /* allocateMemoryRR(process.getRequiredMem());
                 usePrinter(process.getRequiredPrinter());
-                useScanner(process.getRequiredScanner());                           //ORNEK CIKTISINDAN DOLAYI BELLEK TAHSISI DEGISTI !!!
-                useCDROM(process.getRequiredCDROM());*/                             //Ornek ciktinin hatali oldugunu dusunuyorum.
-                return true;
-            } else return false;
+                useScanner(process.getRequiredScanner());
+                useCDROM(process.getRequiredCDROM());*/
+                } else {
+                    process.setProcessString(" HATA - Proses çok sayıda kaynak talep ediyor - proses silindi");
+                    return false;
+                }
+            } else {
+                process.setProcessString(" HATA - Proses (960 MB) tan daha fazla bellek talep ediyor – proses silindi");
+                return false;
+            }
+
         }
     }
+
+
     //Yayınlanan kaynak fonksiyonu
-    void releaseResources(ExecutableProcess process){
-        if(process.getPriority()==0)
+    void releaseResources(ExecutableProcess process) {
+        if (process.getPriority() == 0)
             freeMemoryFCFS(process.getRequiredMem());
         else {
             freeMemoryRR(process.getRequiredMem());
@@ -40,9 +62,10 @@ public class Device {
             releaseCDROM(process.getRequiredCDROM());
         }
     }//Ulaşan Prosesleri Yazdırma
-    public  void printAllArrivedProcesses(int time) {
+
+    public void printAllArrivedProcesses(int time) {
         System.out.println("ZAMAN = " + time);
-        System.out.printf("| %3s | %5s | %7s | %6s | %3s | %3s | %3s | %3s | %3s | %6s | %11s |%n", "pid", "varış", "öncelik" , "kzaman", "mem" , "prn","scn","mdm","cd","Yzaman","status");
+        System.out.printf("| %3s | %5s | %7s | %6s | %3s | %3s | %3s | %3s | %3s | %6s | %11s |%n", "pid", "varış", "öncelik", "kzaman", "mem", "prn", "scn", "mdm", "cd", "Yzaman", "status");
         System.out.println("================================================================================================");
         for (ExecutableProcess process : allArrivedProcessList) {
             if (process.getProcessStatus() == "ERROR") {
@@ -51,41 +74,46 @@ public class Device {
             } else {
                 System.out.printf("%s%s| %-3d | %-5d | %-7d | %-6d | %-3d | %-3d | %-3d | %-3d | %-3d | %-6d | %-11s |%n%s",
                         process.colorStringArray[0], process.colorStringArray[1],
-                        process.getProcessID(),process.getArriveTime(), process.getPriortiyOnInitial(), process.getBurstTime(), process.getRequiredMem(),process.getRequiredPrinter(), process.getRequiredScanner(), process.getRequiredRouter(), process.getRequiredCDROM(),process.getAliveTime(), process.getProcessStatus(), "\u001B[0m");
+                        process.getProcessID(), process.getArriveTime(), process.getPriortiyOnInitial(), process.getBurstTime(), process.getRequiredMem(), process.getRequiredPrinter(), process.getRequiredScanner(), process.getRequiredRouter(), process.getRequiredCDROM(), process.getAliveTime(), process.getProcessStatus(), "\u001B[0m");
             }
         }
     }
-    public void addToArrivedProcessList(ExecutableProcess process){
+
+    public void addToArrivedProcessList(ExecutableProcess process) {
         allArrivedProcessList.add(process);
     }
-    public void printResources(){
+
+    public void printResources() {
         System.out.println("Kalan Kullanilabilir RR alani :" + this.getAvailableMemRR() + " Mbyte");
-        System.out.println("Kalan Kullanilabilir FCFS alani :" + this.getAvailableMemFCFS() +" Mbyte");
-        System.out.println("Kalan Kullanilabilir Yazici Sayisi :" +this.getAvailablePrinter());
-        System.out.println("Kalan Kullanilabilir Tarayici Sayisi :" +this.getAvailableScanner());
-        System.out.println("Kalan Kullanilabilir Modem Sayisi :" +this.getAvailableRouter());
-        System.out.println("Kalan Kullanilabilir CD/DVD Sayisi :" +this.getAvailableCDROM());
+        System.out.println("Kalan Kullanilabilir FCFS alani :" + this.getAvailableMemFCFS() + " Mbyte");
+        System.out.println("Kalan Kullanilabilir Yazici Sayisi :" + this.getAvailablePrinter());
+        System.out.println("Kalan Kullanilabilir Tarayici Sayisi :" + this.getAvailableScanner());
+        System.out.println("Kalan Kullanilabilir Modem Sayisi :" + this.getAvailableRouter());
+        System.out.println("Kalan Kullanilabilir CD/DVD Sayisi :" + this.getAvailableCDROM());
     }
+
     private void freeMemoryRR(int mem) {
-        availableMemRR +=mem;
+        availableMemRR += mem;
     }
-    private void freeMemoryFCFS(int mem){
-        availableMemFCFS+=mem;
+
+    private void freeMemoryFCFS(int mem) {
+        availableMemFCFS += mem;
     }
+
     private void releasePrinter(int printerAmount) {
-        availablePrinter+=printerAmount;
+        availablePrinter += printerAmount;
     }
 
     private void releaseScanner(int scannerAmount) {
-        availableScanner+=scannerAmount;
+        availableScanner += scannerAmount;
     }
 
     private void releaseRouter(int routerAmount) {
-        availableRouter+=routerAmount;
+        availableRouter += routerAmount;
     }
 
     private void releaseCDROM(int cdromAmount) {
-        availableCDROM+=cdromAmount;
+        availableCDROM += cdromAmount;
     }
 
     private void allocateMemoryRR(int reqMem) {

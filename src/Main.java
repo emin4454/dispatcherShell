@@ -42,7 +42,6 @@ public class Main {
                         }
                     } else {
                         process.setProcessStatus("ERROR");
-                        process.setProcessString(" HATA - Proses çok sayıda kaynak talep ediyor - proses silindi");
                     }
                 }
             }
