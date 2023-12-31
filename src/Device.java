@@ -28,6 +28,7 @@ public class Device {
             } else return false;
         }
     }
+    //Yayınlanan kaynak fonksiyonu
     void releaseResources(ExecutableProcess process){
         if(process.getPriority()==0)
             freeMemoryFCFS(process.getRequiredMem());
@@ -38,7 +39,7 @@ public class Device {
             releaseRouter(process.getRequiredRouter());
             releaseCDROM(process.getRequiredCDROM());
         }
-    }
+    }//Ulaşan Prosesleri Yazdırma
     public  void printAllArrivedProcesses(int time) {
         System.out.println(time);
         System.out.printf("| %3s | %5s | %7s | %6s | %3s | %3s | %3s | %3s | %3s | %6s | %11s |%n", "pid", "varış", "öncelik" , "kzaman", "mem" , "prn","scn","mdm","cd","Yzaman","status");
