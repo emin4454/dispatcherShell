@@ -1,0 +1,1 @@
+Çalıştırmak için cmd ye "Java -jar DispatcherShell.jar" yazmanız yeterlidir.
