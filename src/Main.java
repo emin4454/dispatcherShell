@@ -64,7 +64,7 @@ public class Main {
             device.printAllArrivedProcesses(time);
             for (int i = 0; i < 4; i++) {
                 scheduler[i].increaseAliveTimeAllQueue(timeOutQueue);
-                scheduler[i].suspendAllProcesses();
+                scheduler[i].suspendAllProcesses();                 //Proseslere kesme gelirse askıya al
             }
             time++;  //Zaman 1 arrtiriliyor
             sleep();
