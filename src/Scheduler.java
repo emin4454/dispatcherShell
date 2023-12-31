@@ -39,12 +39,22 @@ public abstract class Scheduler {
         }
     }
 
-    public void suspendAllProcesses(){
+    public void suspendAllProcesses() {
         if (!isListEmpty()) {
             for (int i = 0; i < readyQueue.size(); i++) {
                 ExecutableProcess item = readyQueue.poll();
-                if(item.getProcessStatus() != "READY");
-                item.setProcessStatus("WAITING");
+                if (item.getProcessStatus() != "HAZIR") ;
+                     item.setProcessStatus("ASKIDA");
+                readyQueue.add(item);
+            }
+        }
+    }
+    public void setReadyAllProcesses() {
+        if (!isListEmpty()) {
+            for (int i = 0; i < readyQueue.size(); i++) {
+                ExecutableProcess item = readyQueue.poll();
+                if (item.getProcessStatus() != "HAZIR") ;
+                item.setProcessStatus("HAZIR");
                 readyQueue.add(item);
             }
         }

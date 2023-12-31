@@ -5,9 +5,13 @@ import java.util.LinkedList;
 
 public class ReadFile {
     private final String fileName;
-
+    private int lastArriveTime = 0;
     public ReadFile(String fileName){
         this.fileName = fileName;
+    }
+
+    public int getLastArriveTime() {
+        return lastArriveTime;
     }
 
     public LinkedList<ExecutableProcess> ReadTheFile() throws IOException {
@@ -15,7 +19,6 @@ public class ReadFile {
         FileReader fileReader=new FileReader(fileName);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String line;
-        int totalTime= 0;
         while((line=bufferedReader.readLine())!=null){
             line = line.replaceAll("\\s" , "");
             String[] props = line.split(",");
@@ -23,11 +26,10 @@ public class ReadFile {
             for(int i =0 ; i< intProps.length;i++){
                 intProps[i] = Integer.valueOf(props[i]);
             }
-            totalTime=totalTime+intProps[2];
+            lastArriveTime = Math.max(intProps[0], lastArriveTime);
             ExecutableProcess process = new ExecutableProcess(intProps[0],intProps[1],intProps[2],intProps[3],intProps[4],intProps[5],intProps[6],intProps[7]);
             processList.add(process);
         }
-        System.out.println("\u001B[31mBu metin kırmızı renkte yazdırılıyor."+totalTime+"\u001B[0m");
         return processList;
     }
 }

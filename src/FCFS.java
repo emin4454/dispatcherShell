@@ -12,10 +12,10 @@ public class FCFS extends Scheduler {
         if (aboutToExecuteProcess.executeOneTimeUnit()) {
             readyQueue.poll();// Eger true donerse proses bitmis demektir
             device.releaseResources(aboutToExecuteProcess); //Kaynaklar serbest bırakılıyor
-            aboutToExecuteProcess.setProcessStatus("COMPLETED");
+            aboutToExecuteProcess.setProcessStatus("TAMAMLANDI");
         }
         else{
-            aboutToExecuteProcess.setProcessStatus("RUNNING");
+            aboutToExecuteProcess.setProcessStatus("CALISIYOR");
         }
     }
 }

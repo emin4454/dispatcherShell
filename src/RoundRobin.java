@@ -7,11 +7,11 @@ public class RoundRobin extends Scheduler {
     public void executeOneIteration(Scheduler[] schedulers) {
         ExecutableProcess aboutToExecuteProcess = readyQueue.poll();
         if (aboutToExecuteProcess.executeOneTimeUnit()) {
-            aboutToExecuteProcess.setProcessStatus("COMPLETED");
+            aboutToExecuteProcess.setProcessStatus("TAMAMLANDI");
             device.releaseResources(aboutToExecuteProcess);
         } else {
                 readyQueue.add(aboutToExecuteProcess);
-                aboutToExecuteProcess.setProcessStatus("RUNNING");
+                aboutToExecuteProcess.setProcessStatus("CALISIYOR");
         }
     }
 }

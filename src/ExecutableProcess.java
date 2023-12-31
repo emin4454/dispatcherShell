@@ -7,6 +7,7 @@ public class ExecutableProcess {
     private int processid;  //Atanan proses Id
     private int arriveTime; //Prosesin gelme zamani
     private int priority; //Prosesin onceligi
+    private int priortiyOnInitial;
     private int burstTime; //Prosesin ne kadar zaman aldigi
     private int requiredMem; //Prosesin ihtiyac duydugu memory
     private int requiredPrinter;// Prosesin ihtiyac duydugu yazici sayisi
@@ -24,11 +25,14 @@ public class ExecutableProcess {
 
     private String processString = "";
 
-
+    public int getPriortiyOnInitial() {
+        return priortiyOnInitial;
+    }
 
     public ExecutableProcess(int arriveTime, int priority, int burstTime, int requiredMem, int requiredPrinter, int requiredScanner, int requiredRouter, int requiredCD) {
         this.arriveTime = arriveTime;
         this.priority = priority;
+        this.priortiyOnInitial=priority;
         this.burstTime = burstTime;
         this.requiredMem = requiredMem;
         this.requiredPrinter = requiredPrinter;

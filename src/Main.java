@@ -5,14 +5,10 @@ import java.util.Queue;
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 
-/*
- * Text dosyasindan processleri okuma sinifi yapilacak
- * Printler renkli yapilacak ve düzenlenecek
- * Kod Test edilecek
- * bellek konumu
- * */
+
 public class Main {
     public static String clearScreenString = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+
     public static void main(String[] args) throws IOException, InterruptedException {
 
 
@@ -31,17 +27,22 @@ public class Main {
 
         int time = 0; // zaman tanimlaniyor
         int lastIteratedPriority = 0; //Kesme geldigini anlamak icin tanimlaniyor
-
+        int lastArriveTime = readfile.getLastArriveTime();
         while (true) {
             for (ExecutableProcess process : processes) {               //Tum prosesler dolasiliyor
                 if (process.getArriveTime() == time) {                  // Eger prosesin zamani geldiyse
                     process.assignProcess(device);
                     if (device.tryAllocateForProcess(process)) {
-                            process.setProcessStatus("READY");//eger proses yeterli alana sahipse//eger onceligi daha yuksekse kesme geldigini belirtir
-                            scheduler[process.getPriority()].addToQueue(process);   //zamani gelen proses var ise queuya ekleniyor
+                        process.setProcessStatus("HAZIR");//eger proses yeterli alana sahipse//eger onceligi daha yuksekse kesme geldigini belirtir
+                        scheduler[process.getPriority()].addToQueue(process);   //zamani gelen proses var ise queuya ekleniyor
+                        if (process.getPriority() == 0) {
+                            for (int i = 1; i < 4; i++) {
+                                scheduler[i].suspendAllProcesses();
+                            }
+                        }
                     } else {
-                       process.setProcessStatus("ERROR");
-                       process.setProcessString(" HATA - Proses çok sayıda kaynak talep ediyor - proses silindi");
+                        process.setProcessStatus("ERROR");
+                        process.setProcessString(" HATA - Proses çok sayıda kaynak talep ediyor - proses silindi");
                     }
                 }
             }
@@ -55,6 +56,7 @@ public class Main {
             } else {              // PROSESLERIN EXECUTELANDIĞI YER
                 for (int i = 0; i < 4; i++) {
                     if (!scheduler[i].isListEmpty()) {   // hazır listesi boş degil ise
+                        scheduler[i].setReadyAllProcesses();
                         scheduler[i].executeOneIteration(scheduler);        //En yuksek oncelikli process 1 iterasyon calistiriliyor
                         lastIteratedPriority = i;   // kesme kontrolü için  son itterasyona eşitlenir
                         break;
@@ -63,20 +65,34 @@ public class Main {
             }
             device.printAllArrivedProcesses(time);
             for (int i = 0; i < 4; i++) {
-                scheduler[i].increaseAliveTimeAllQueue(timeOutQueue);
-                scheduler[i].suspendAllProcesses();                 //Proseslere kesme gelirse askıya al
+                scheduler[i].increaseAliveTimeAllQueue(timeOutQueue);//Proseslere kesme gelirse askıya al
             }
             time++;  //Zaman 1 arrtiriliyor
             sleep();
             clearScreen();
+            if(time>lastArriveTime)
+            {
+                boolean endCheck = true;
+                for (int i =0 ;i<4;i++){
+                    if(!scheduler[i].isListEmpty()){
+                        endCheck=false;
+                    }
+                }
+                if(endCheck){
+                    System.out.println("PROSESLER BITTI PROGRAM SONLANIYOR");
+                    break;
+                }
+            }
         }
     }
-    public static void clearScreen(){
+
+    public static void clearScreen() {
         System.out.println(clearScreenString);
     }
-    static void sleep(){
+
+    static void sleep() {
         try {
-            Thread.sleep(2000);         // 1 saniye bekleniliyor
+            Thread.sleep(1000);         // 1 saniye bekleniliyor
         } catch (Exception e) {   //eğer hata var ise hatayı yazdır
             System.out.println(e.toString());
         }

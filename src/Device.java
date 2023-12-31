@@ -15,15 +15,15 @@ public class Device {
     boolean tryAllocateForProcess(ExecutableProcess process) {
         if (process.getPriority() == 0 ) {
             if(process.getRequiredMem() <= availableMemFCFS && process.getRequiredPrinter() <= 0 && process.getRequiredScanner() <= 0 && process.getRequiredRouter() <= 0 && process.getRequiredCDROM() <= 0) {
-/*                allocateMemoryFCFS(process.getRequiredMem());*/
+/*                allocateMemoryFCFS(process.getRequiredMem());*/                   //ORNEK CIKTISINDAN DOLAYI BELLEK TAHSISI DEGISTI !!!
                 return true;
             }else return false;
         } else {
             if (process.getRequiredMem() <= availableMemRR && process.getRequiredPrinter() <= availablePrinter && process.getRequiredScanner() <= availableScanner && process.getRequiredRouter() <= availableRouter && process.getRequiredCDROM() <= availableCDROM) {
 /*                allocateMemoryRR(process.getRequiredMem());
                 usePrinter(process.getRequiredPrinter());
-                useScanner(process.getRequiredScanner());
-                useCDROM(process.getRequiredCDROM());*/
+                useScanner(process.getRequiredScanner());                           //ORNEK CIKTISINDAN DOLAYI BELLEK TAHSISI DEGISTI !!!
+                useCDROM(process.getRequiredCDROM());*/                             //Ornek ciktinin hatali oldugunu dusunuyorum.
                 return true;
             } else return false;
         }
@@ -41,7 +41,7 @@ public class Device {
         }
     }//Ulaşan Prosesleri Yazdırma
     public  void printAllArrivedProcesses(int time) {
-        System.out.println(time);
+        System.out.println("ZAMAN = " + time);
         System.out.printf("| %3s | %5s | %7s | %6s | %3s | %3s | %3s | %3s | %3s | %6s | %11s |%n", "pid", "varış", "öncelik" , "kzaman", "mem" , "prn","scn","mdm","cd","Yzaman","status");
         System.out.println("================================================================================================");
         for (ExecutableProcess process : allArrivedProcessList) {
@@ -51,7 +51,7 @@ public class Device {
             } else {
                 System.out.printf("%s%s| %-3d | %-5d | %-7d | %-6d | %-3d | %-3d | %-3d | %-3d | %-3d | %-6d | %-11s |%n%s",
                         process.colorStringArray[0], process.colorStringArray[1],
-                        process.getProcessID(),process.getArriveTime(), process.getPriority(), process.getBurstTime(), process.getRequiredMem(),process.getRequiredPrinter(), process.getRequiredScanner(), process.getRequiredRouter(), process.getRequiredCDROM(),process.getAliveTime(), process.getProcessStatus(), "\u001B[0m");
+                        process.getProcessID(),process.getArriveTime(), process.getPriortiyOnInitial(), process.getBurstTime(), process.getRequiredMem(),process.getRequiredPrinter(), process.getRequiredScanner(), process.getRequiredRouter(), process.getRequiredCDROM(),process.getAliveTime(), process.getProcessStatus(), "\u001B[0m");
             }
         }
     }
