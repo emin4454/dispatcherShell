@@ -12,6 +12,7 @@ import java.util.Queue;
  * bellek konumu
  * */
 public class Main {
+    public static String clearScreenString = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
     public static void main(String[] args) throws IOException, InterruptedException {
 
 
@@ -71,8 +72,7 @@ public class Main {
         }
     }
     public static void clearScreen(){
-        for (int i = 0 ; i<50 ; i++)
-            System.out.println("\n");
+        System.out.println(clearScreenString);
     }
     static void sleep(){
         try {

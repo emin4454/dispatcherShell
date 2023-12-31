@@ -16,6 +16,8 @@ public class ExecutableProcess {
     private int aliveTime;   //Prosesin yaşadığı süre
     private String processStatus = "";
 
+    public String colorStringArray[] = {"", ""};
+
     public int getAliveTime() {
         return aliveTime;
     }
@@ -33,6 +35,7 @@ public class ExecutableProcess {
         this.requiredScanner = requiredScanner;
         this.requiredRouter = requiredRouter;
         this.requiredCDROM = requiredCD;
+        setColorStringArray();
     }
 
     public void setProcessStatus(String processStatus) {
@@ -123,5 +126,10 @@ public class ExecutableProcess {
                         " " + requiredCDROM +
                         " " + aliveTime;
 
+    }
+
+    private void setColorStringArray()
+    {
+        colorStringArray =  Color.setTextColor();
     }
 }

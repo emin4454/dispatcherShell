@@ -45,11 +45,12 @@ public class Device {
         System.out.println("================================================================================================");
         for (ExecutableProcess process : allArrivedProcessList) {
             if (process.getProcessStatus() == "ERROR") {
-                System.out.printf("| %-3d |", process.getProcessID());
-                System.out.println(process.getProcessString());
+                System.out.printf(process.colorStringArray[0], process.colorStringArray[1], "| %-3d |", process.getProcessID(), "\u001B[0m");
+                System.out.println(process.colorStringArray[0] + process.colorStringArray[1] + process.getProcessString() + "\u001B[0m");
             } else {
-                System.out.printf("| %-3d | %-5d | %-7d | %-6d | %-3d | %-3d | %-3d | %-3d | %-3d | %-6d | %-11s |%n",
-                        process.getProcessID(),process.getArriveTime(), process.getPriority(), process.getBurstTime(), process.getRequiredMem(),process.getRequiredPrinter(), process.getRequiredScanner(), process.getRequiredRouter(), process.getRequiredCDROM(),process.getAliveTime(), process.getProcessStatus());
+                System.out.printf("%s%s| %-3d | %-5d | %-7d | %-6d | %-3d | %-3d | %-3d | %-3d | %-3d | %-6d | %-11s |%n%s",
+                        process.colorStringArray[0], process.colorStringArray[1],
+                        process.getProcessID(),process.getArriveTime(), process.getPriority(), process.getBurstTime(), process.getRequiredMem(),process.getRequiredPrinter(), process.getRequiredScanner(), process.getRequiredRouter(), process.getRequiredCDROM(),process.getAliveTime(), process.getProcessStatus(), "\u001B[0m");
             }
         }
     }
